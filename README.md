@@ -1,36 +1,35 @@
-# CRUD User System
+# Validation and Error Handling System
 
-## Internship Task 3 – CRUD Operations
+## Internship Task 3
 
-This project was developed as part of my internship.
+This project was completed as part of my internship at ApexPlanet Software Pvt. Ltd.
 
-### Features
+## Objective
 
-- Create new users
-- Read and display all users
-- Update existing user details
-- Delete users
-- PHP and MySQL integration
-- Responsive user interface using HTML, CSS, and JavaScript
+Enhance the user registration system with client-side validation, server-side validation, and robust error handling.
 
-### Technologies Used
+## Features
+
+- Client-side validation using JavaScript
+- Server-side validation using PHP
+- Email validation
+- Phone number validation
+- Password length validation
+- Duplicate email validation
+- Prepared Statements to prevent SQL Injection
+- Password hashing
+- User-friendly success and error messages
+- MySQL database integration
+
+## Technologies Used
 
 - PHP
 - MySQL
 - HTML5
 - CSS3
 - JavaScript
+- Git & GitHub
 
-### Project Files
-
-- register.php
-- manage_users.php
-- edit_user.php
-- delete_user.php
-- db.php
-- style.css
-- script.js
-
-### Author
+## Author
 
 Hansikanune
