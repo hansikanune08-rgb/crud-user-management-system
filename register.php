@@ -1,30 +1,87 @@
 <?php
 include "db.php";
+$message = "";
+$messageColor = "red";
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
-$name = $_POST['name'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
-$password = $_POST['password'];
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $password = trim($_POST['password']);
 
+    // Empty field validation
+    if (empty($name) || empty($email) || empty($phone) || empty($password)) {
+        $message = "All fields are required.";
+    }
 
-$query = "INSERT INTO users
-(name,email,phone,password)
-VALUES
-('$name','$email','$phone','$password')";
+    // Email validation
+    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = "Please enter a valid email address.";
+    }
 
+    // Phone validation
+    elseif (!preg_match("/^[0-9]{10}$/", $phone)) {
+        $message = "Phone number must contain exactly 10 digits.";
+    }
 
-if(mysqli_query($conn,$query)){
-    echo "User Registered Successfully";
+    // Password validation
+    elseif (strlen($password) < 6) {
+        $message = "Password must be at least 6 characters long.";
+    }
+
+    else {
+
+        // Check duplicate email
+        $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $check->bind_param("s", $email);
+        $check->execute();
+        $result = $check->get_result();
+
+        if ($result->num_rows > 0) {
+
+            $message = "Email already exists.";
+
+        } else {
+
+            // Hash password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Prepared statement
+            $stmt = $conn->prepare("INSERT INTO users(name,email,phone,password) VALUES(?,?,?,?)");
+
+            if ($stmt) {
+
+                $stmt->bind_param("ssss", $name, $email, $phone, $hashedPassword);
+
+                if ($stmt->execute()) {
+
+                    $messageColor = "green";
+                    $message = "User Registered Successfully.";
+
+                } else {
+
+                    $message = "Database Error: " . $stmt->error;
+
+                }
+
+                $stmt->close();
+
+            } else {
+
+                $message = "Database connection error.";
+
+            }
+
+        }
+
+        $check->close();
+    }
 }
-
-}
-
 ?>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -32,25 +89,35 @@ if(mysqli_query($conn,$query)){
 
 <h2>User Registration</h2>
 
+<?php
+if ($message != "") {
+    echo "<p style='color:$messageColor; text-align:center; font-weight:bold;'>$message</p>";
+}
+?>
+
 <form action="register.php" method="POST" onsubmit="return validateForm();">
 
-<label for="name">Name:</label><br>
+<label>Name:</label><br>
 <input type="text" id="name" name="name" placeholder="Enter your name"><br><br>
 
-<label for="email">Email:</label><br>
+<label>Email:</label><br>
 <input type="email" id="email" name="email" placeholder="Enter your email"><br><br>
 
-<label for="phone">Phone:</label><br>
+<label>Phone:</label><br>
 <input type="text" id="phone" name="phone" placeholder="Enter 10-digit phone number"><br><br>
 
-<label for="password">Password:</label><br>
+<label>Password:</label><br>
 <input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
 
 <input type="submit" name="submit" value="Register">
 
 </form>
+
 </div>
 
-</body>
 <script src="script.js"></script>
+
+</body>
 </html>
+
+
