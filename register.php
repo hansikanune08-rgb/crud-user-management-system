@@ -79,9 +79,11 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+    <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -97,18 +99,17 @@ if ($message != "") {
 
 <form action="register.php" method="POST" onsubmit="return validateForm();">
 
-<label>Name:</label><br>
-<input type="text" id="name" name="name" placeholder="Enter your name"><br><br>
+<label>Name:</label>
+<input type="text" id="name" name="name" placeholder="Enter your name">
 
-<label>Email:</label><br>
-<input type="email" id="email" name="email" placeholder="Enter your email"><br><br>
+<label>Email:</label>
+<input type="email" id="email" name="email" placeholder="Enter your email">
 
-<label>Phone:</label><br>
-<input type="text" id="phone" name="phone" placeholder="Enter 10-digit phone number"><br><br>
+<label>Phone:</label>
+<input type="text" id="phone" name="phone" placeholder="Enter 10-digit phone number">
 
-<label>Password:</label><br>
-<input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
-
+<label>Password:</label>
+<input type="password" id="password" name="password" placeholder="Enter your password">
 <input type="submit" name="submit" value="Register">
 
 </form>

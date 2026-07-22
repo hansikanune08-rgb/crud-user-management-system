@@ -1,62 +1,93 @@
 <?php
 include 'db.php';
 
+// Check if ID exists
+if (!isset($_GET['id'])) {
+    header("Location: manage_users.php");
+    exit();
+}
+
 $id = $_GET['id'];
 
-$result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
+// Fetch user details
+$result = mysqli_query($conn, "SELECT * FROM users WHERE id='$id'");
 $user = mysqli_fetch_assoc($result);
 
+// If user not found
+if (!$user) {
+    echo "User not found!";
+    exit();
+}
 
-if(isset($_POST['update']))
-{
+// Update user
+if (isset($_POST['update'])) {
+
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
 
-    mysqli_query($conn, "UPDATE users SET 
+    mysqli_query($conn, "UPDATE users SET
         name='$name',
         email='$email',
         phone='$phone'
-        WHERE id=$id");
+        WHERE id='$id'");
 
     header("Location: manage_users.php");
+    exit();
 }
-
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<title>Edit User</title>
-</head>
 
-<body>
+<div class="container">
 
-<h2>Edit User</h2>
+    <h2>Edit User</h2>
 
-<form method="POST">
+    <form method="POST">
 
-Name:
-<input type="text" name="name" value="<?php echo $user['name']; ?>">
-<br><br>
+        <label>Name:</label>
 
-Email:
-<input type="email" name="email" value="<?php echo $user['email']; ?>">
-<br><br>
+        <input
+            type="text"
+            name="name"
+            value="<?php echo $user['name']; ?>"
+            required>
 
-Phone:
-<input type="text" name="phone" value="<?php echo $user['phone']; ?>">
-<br><br>
+        <label>Email:</label>
 
-<button type="submit" name="update">
-Update
-</button>
+        <input
+            type="email"
+            name="email"
+            value="<?php echo $user['email']; ?>"
+            required>
 
-</form>
+        <label>Phone:</label>
+
+        <input
+            type="text"
+            name="phone"
+            value="<?php echo $user['phone']; ?>"
+            required>
+
+        <input
+            type="submit"
+            name="update"
+            value="Update">
+
+    </form>
+
+</div>
 
 </body>
 </html>

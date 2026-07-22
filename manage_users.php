@@ -2,57 +2,69 @@
 include 'db.php';
 
 $result = mysqli_query($conn, "SELECT * FROM users");
-
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
     <title>Manage Users</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<h2>Manage Users</h2>
+<div class="container">
 
-<table border="1" cellpadding="10">
+    <h2>Manage Users</h2>
 
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Phone</th>
-    <th>Action</th>
-</tr>
+    <table>
 
-<?php
-while($row = mysqli_fetch_assoc($result))
-{
-?>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
 
-<tr>
-    <td><?php echo $row['id']; ?></td>
-    <td><?php echo $row['name']; ?></td>
-    <td><?php echo $row['email']; ?></td>
-    <td><?php echo $row['phone']; ?></td>
+        <?php
+        while($row = mysqli_fetch_assoc($result))
+        {
+        ?>
 
-    <td>
-        <a href="edit_user.php?id=<?php echo $row['id']; ?>">Edit</a>
-        |
-        <a href="delete_user.php?id=<?php echo $row['id']; ?>">Delete</a>
-    </td>
+        <tr>
 
-</tr>
+            <td><?php echo $row['id']; ?></td>
 
-<?php
-}
-?>
+            <td><?php echo $row['name']; ?></td>
 
-</table>
+            <td><?php echo $row['email']; ?></td>
+
+            <td><?php echo $row['phone']; ?></td>
+
+            <td>
+
+                <a class="edit-btn" href="edit_user.php?id=<?php echo $row['id']; ?>">
+                    Edit
+                </a>
+
+                <a class="delete-btn" href="delete_user.php?id=<?php echo $row['id']; ?>">
+                    Delete
+                </a>
+
+            </td>
+
+        </tr>
+
+        <?php
+        }
+        ?>
+
+    </table>
+
+</div>
 
 </body>
+
 </html>
