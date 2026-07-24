@@ -9,9 +9,10 @@ if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
     $password = trim($_POST['password']);
+    $role = trim($_POST['role']);
 
     // Empty field validation
-    if (empty($name) || empty($email) || empty($phone) || empty($password)) {
+    if (empty($name) || empty($email) || empty($phone) || empty($password) || empty($role)) {
         $message = "All fields are required.";
     }
 
@@ -48,11 +49,11 @@ if (isset($_POST['submit'])) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             // Prepared statement
-            $stmt = $conn->prepare("INSERT INTO users(name,email,phone,password) VALUES(?,?,?,?)");
+            $stmt = $conn->prepare("INSERT INTO users(name,email,phone,password,role) VALUES(?,?,?,?,?)");
 
             if ($stmt) {
 
-                $stmt->bind_param("ssss", $name, $email, $phone, $hashedPassword);
+                $stmt->bind_param("sssss", $name, $email, $phone, $hashedPassword, $role);
 
                 if ($stmt->execute()) {
 
@@ -79,7 +80,8 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-    <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>User Registration</title>
@@ -110,6 +112,16 @@ if ($message != "") {
 
 <label>Password:</label>
 <input type="password" id="password" name="password" placeholder="Enter your password">
+
+<label>Role:</label>
+<select id="role" name="role">
+    <option value="">-- Select Role --</option>
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+</select>
+
+<br><br>
+
 <input type="submit" name="submit" value="Register">
 
 </form>
@@ -120,5 +132,3 @@ if ($message != "") {
 
 </body>
 </html>
-
-
